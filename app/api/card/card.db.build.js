@@ -5,21 +5,14 @@
 */
 require("babel-core/register");
 var fs = require('fs');
-import mongoose from 'mongoose';
 var sets = require('../../../data/allSets.json');
 import Card from './card.model';
 
-mongoose.connect(process.env.MONGO_URI);
-
 function create(card, callback) {
   try {
-    Card.create(card, function (err, card) {
-      callback();
-    });
+    Card.create(card, (err, card) => callback());
   } catch (e) {
-    Card.update(card, function (err, card) {
-      callback();
-    });
+    Card.update(card, (err, card) => callback());
   }
 }
 
@@ -39,8 +32,8 @@ function build(sets) {
               console.log("Finish Building " + completed + " of " + 155 + ": " + sets[setname].name);
               completed ++;
               if(completed === 155) {
-                console.log("FINISH BUILD, exiting in 10 seconds");
-                setTimeout(() => process.exit(), 10000);
+                console.log("FINISH BUILD, exiting in 30 seconds");
+                setTimeout(() => process.exit(), 30000);
               }
             }
           });
