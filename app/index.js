@@ -29,7 +29,7 @@ app.use(session({
 }));
 
 mongoose.connect(process.env.MONGO_URI || process.env.MONGOLAB_URI);
-console.log(process.env.MONGO_URI);
+
 // internal middleware
 app.use(middleware());
 
