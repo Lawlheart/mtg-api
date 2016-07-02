@@ -25,6 +25,7 @@
     "express": "^4.13.3",
     "express-session": "^1.13.0",
     "mongoose": "^4.5.3",
+    "mongoose-search-plugin": "^0.1.2",
     "resource-router-middleware": "^0.5.1"
   },
   "jshintConfig": {
