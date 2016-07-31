@@ -36,6 +36,10 @@ app.use(middleware());
 // api router
 app.use('/api', api());
 
+app.use('/', function(req, res) {
+  res.json("Server Active");
+});
+
 app.server.listen(process.env.PORT || 8080);
 
 console.log(`Started on port ${app.server.address().port}`);
