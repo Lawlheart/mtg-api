@@ -28,10 +28,10 @@ function build(sets) {
           card._id = card.multiverseid;
           create(card, function () {
             if (i === cardSet.length - 1) {
-              // doesn't flag all of the builds, 155 of 193
-              console.log("Finish Building " + completed + " of " + 155 + ": " + sets[setname].name);
+              // doesn't flag all of the builds, 160 of ?
+              console.log("Finish Building " + completed + " of " + 160 + ": " + sets[setname].name);
               completed ++;
-              if(completed === 155) {
+              if(completed === 160) {
                 console.log("FINISH BUILD, exiting in 30 seconds");
                 setTimeout(() => process.exit(), 30000);
               }
