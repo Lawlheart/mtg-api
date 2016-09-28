@@ -77,12 +77,27 @@ export function index(req, res) {
   .catch(handleError(res));
 }
 
-// Gets a single Card from the DB
+// Gets a one or more Cards from the DB
 export function show(req, res) {
-  Card.findById(req.params.id).exec()
-  .then(handleEntityNotFound(res))
-  .then(respondWithResult(res))
-  .catch(handleError(res));
+  if(req.params.id.indexOf("|") >= 0) {
+    var queries = req.params.id.split("|");
+    var promises = [];
+    for(var i=0; i<queries.length; i++) {
+      var promise = Card.findById(queries[i]).exec();
+      promises.push(promise);
+    }
+    Promise.all(promises)
+      .then(handleEntityNotFound(res))
+      .then(handleEntityNotFound(res))
+      .then(respondWithResult(res))
+      .catch(handleError(res));
+
+  } else {
+    Card.findById(req.params.id).exec()
+    .then(handleEntityNotFound(res))
+    .then(respondWithResult(res))
+    .catch(handleError(res));
+  }
 }
 
 // Creates a new Card in the DB

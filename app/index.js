@@ -40,6 +40,6 @@ app.use('/', function(req, res) {
   res.json("Server Active");
 });
 
-app.server.listen(process.env.PORT || 8080);
+app.server.listen(process.env.PORT || 8081);
 
 console.log(`Started on port ${app.server.address().port}`);
