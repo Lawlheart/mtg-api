@@ -23,10 +23,9 @@ function respondWithResult(res, statusCode) {
 
 function saveUpdates(updates) {
   return function(entity) {
-    var updated = _.extend(entity, updates);
-    return updated.saveAsync()
-    .spread(updated => {
-      return updated;
+    return Block.update(updates)
+    .then(() => {
+      return updates;
     });
   };
 }
@@ -76,9 +75,19 @@ export function show(req, res) {
 
 // Creates a new Block in the DB
 export function create(req, res) {
-  Block.createAsync(req.body)
-  .then(respondWithResult(res, 201))
-  .catch(handleError(res));
+  let block = req.body;
+  block._id = block.code;
+  Block.findById(block._id).exec()
+    .then((data) => {
+      if(data) {
+        res.status(403).send({"error": "block already exists"});
+        return null;
+      } else {
+        Block.create(block)
+        .then(respondWithResult(res, 201))
+        .catch(handleError(res));
+      }
+    });
 }
 
 // Updates an existing Block in the DB

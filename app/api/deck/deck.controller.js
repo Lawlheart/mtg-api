@@ -76,6 +76,7 @@ export function show(req, res) {
 
 // Creates a new Deck in the DB
 export function create(req, res) {
+  if(!req.body.name || !req.body.user || req.body.cards === undefined) return res.status(500).send({"error": "invalid data"});
   Deck.create(req.body)
   .then(respondWithResult(res, 201))
   .catch(handleError(res));

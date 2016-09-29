@@ -1,5 +1,3 @@
-try { require('dotenv').load() } catch(Error) {}
-
 process.env.NODE_ENV = 'test';
 
 import Card from '../app/api/card/card.model';
@@ -13,25 +11,6 @@ import {it, describe, beforeEach} from "mocha";
 let should = chai.should();
 
 chai.use(chaiHttp);
-
-describe('Basic Configuration', () => {
-  it('should give the basic message for the root route', (done) => {
-    chai.request(server).get('/').end((err, res) => {
-      res.should.have.status(200);
-      res.body.should.equal('Server Active');
-      done();
-    });
-  });
-  it('should give version number at /api', (done) => {
-    chai.request(server).get('/api').end((err, res) => {
-      res.should.have.status(200);
-      res.body.should.be.a('object');
-      res.body.should.have.property('version');
-      done();
-    });
-  });
-});
-
 
 describe('Cards', () => {
   beforeEach(done => {
@@ -127,7 +106,6 @@ describe('Cards', () => {
     it('should delete a card, given a multiverseid', (done) => {
       let card = testCards[0];
       chai.request(server).post('/api/cards').send(card).end((err, res) => {
-        res.should.have.status(201);
         chai.request(server).delete('/api/cards/' + card.multiverseid).end((err, res) => {
           res.should.have.status(204);
           done();
@@ -170,8 +148,7 @@ describe('Cards', () => {
     });
     it('returns an object that includes relevant cards', (done) => {
       let card = testCards[55];
-      let query = card.name.split().join("+")
-      console.log(query);
+      let query = card.name.split().join("+");
       chai.request(server).post('/api/cards').send(card).end((err, res) => {
         chai.request(server).get('/api/cards/search?search=' + query).end((err, res) => {
           res.body.results.length.should.equal(1);
