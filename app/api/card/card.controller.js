@@ -24,6 +24,10 @@ function respondWithResult(res, statusCode) {
 function saveUpdates(updates) {
   return function(entity) {
     var updated = _.extend(entity, updates);
+    console.log("before: " + entity);
+    console.log("update: ");
+    console.log(updates);
+    console.log("after: " + updated);
     return updated.save()
     .then(updated => {
       return updated;
@@ -78,6 +82,7 @@ export function index(req, res) {
 }
 
 // Gets a one or more Cards from the DB
+// TODO: handle individual bad ids, return all valid cards
 export function show(req, res) {
   if(req.params.id.indexOf("|") >= 0) {
     var queries = req.params.id.split("|");
@@ -87,7 +92,6 @@ export function show(req, res) {
       promises.push(promise);
     }
     Promise.all(promises)
-      .then(handleEntityNotFound(res))
       .then(handleEntityNotFound(res))
       .then(respondWithResult(res))
       .catch(handleError(res));
@@ -102,16 +106,25 @@ export function show(req, res) {
 
 // Creates a new Card in the DB
 export function create(req, res) {
-  Card.create(req.body).exec()
-  .then(respondWithResult(res, 201))
-  .catch(handleError(res));
+  let card = req.body;
+  card._id = card.multiverseid;
+  Card.findById(card._id).exec()
+    .then((data) => {
+      if(data) {
+        res.status(403).send({"error": "card already exists"});
+        return null;
+      } else {
+        Card.create(card)
+        .then(respondWithResult(res, 201))
+        .catch(handleError(res));
+      }
+    })
 }
 
 // Updates an existing Card in the DB
 export function update(req, res) {
-  if (req.body._id) {
-    delete req.body._id;
-  }
+  console.log(req.body);
+  console.log(req.params.id);
   Card.findById(req.params.id).exec()
   .then(handleEntityNotFound(res))
   .then(saveUpdates(req.body))

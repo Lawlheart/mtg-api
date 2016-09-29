@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "node build.js"
+    "build": "node build.js",
+    "test": "mocha --timeout 10000 --compilers js:babel-core/register",
+    "coverage": "node_modules/.bin/nyc --require babel-core/register node_modules/.bin/mocha || true"
   },
   "repository": {
     "type": "git",
@@ -36,5 +37,11 @@
     "presets": [
       "es2015"
     ]
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-http": "^3.0.0",
+    "mocha": "^3.1.0",
+    "nyc": "^8.3.0"
   }
 }

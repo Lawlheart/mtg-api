@@ -25,3 +25,6 @@ public
 .idea
 .env
 data/
+
+coverage/
+.nyc_output/

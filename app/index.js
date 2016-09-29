@@ -28,7 +28,8 @@ app.use(session({
   saveUninitialized: true
 }));
 
-mongoose.connect(process.env.MONGO_URI || process.env.MONGOLAB_URI);
+if(process.env.NODE_ENV === 'test') mongoose.connect(process.env.MONGO_TEST_URI || process.env.MONGOLAB_TEST_URI);
+else mongoose.connect(process.env.MONGO_URI || process.env.MONGOLAB_URI);
 
 // internal middleware
 app.use(middleware());
@@ -43,3 +44,5 @@ app.use('/', function(req, res) {
 app.server.listen(process.env.PORT || 8081);
 
 console.log(`Started on port ${app.server.address().port}`);
+
+export default app;
