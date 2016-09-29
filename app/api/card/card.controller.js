@@ -23,14 +23,10 @@ function respondWithResult(res, statusCode) {
 
 function saveUpdates(updates) {
   return function(entity) {
-    var updated = _.extend(entity, updates);
-    console.log("before: " + entity);
-    console.log("update: ");
-    console.log(updates);
-    console.log("after: " + updated);
-    return updated.save()
+    updates._id = entity._id;
+    return Card.update(updates)
     .then(updated => {
-      return updated;
+      return updates;
     });
   };
 }
@@ -123,8 +119,6 @@ export function create(req, res) {
 
 // Updates an existing Card in the DB
 export function update(req, res) {
-  console.log(req.body);
-  console.log(req.params.id);
   Card.findById(req.params.id).exec()
   .then(handleEntityNotFound(res))
   .then(saveUpdates(req.body))

@@ -28,8 +28,8 @@ app.use(session({
   saveUninitialized: true
 }));
 
-if(process.env.NODE_ENV === 'test') mongoose.connect(process.env.MONGO_TEST_URI || process.env.MONGOLAB_TEST_URI);
-else mongoose.connect(process.env.MONGO_URI || process.env.MONGOLAB_URI);
+let db = process.env.NODE_ENV === 'test' ? process.env.MONGO_TEST_URI : process.env.MONGO_URI;
+mongoose.connect(db);
 
 // internal middleware
 app.use(middleware());
